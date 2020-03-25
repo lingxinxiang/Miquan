@@ -1,9 +1,18 @@
 package com.example.miquan;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.miquan.adapter.TestListAdapter;
+import com.example.miquan.entry.ReciveData;
+import com.google.gson.Gson;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,13 +22,41 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    //  String url = "https://suzhougs.pang118.com/api/device/queryDeviceSaleProducts?deviceId=1077 https://api.apiopen.top/getImages?page=0&count=10";
+    public static final int HAND_MSG_DATA_READY = 0x0012;
+    private ListView mListView;
+    private TestListAdapter mAdapter;
+    private List<ReciveData.PhotoData> mPhotoData = new ArrayList<>();
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case HAND_MSG_DATA_READY:
+                    mAdapter.notifyDataSetChanged();
+                    break;
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mListView = findViewById(R.id.test_listview);
+
+        mAdapter = new TestListAdapter(mPhotoData);
+        mListView.setAdapter(mAdapter);
+        initData();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .build();
+        ImageLoader.getInstance().init(config);
+
+    }
+
+    private void initData() {
         new Thread() {
             @Override
             public void run() {
@@ -27,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }.start();
     }
-
     private void requestData() {
         HttpURLConnection connection = null;
         try {
@@ -53,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
                 throw new IOException("读取流失败");
             }
             Log.d("TEST", "result" + result);
+            ReciveData reciveData = new Gson().fromJson(result, ReciveData.class);
+            mPhotoData.addAll(reciveData.data);
+            mHandler.sendEmptyMessage(HAND_MSG_DATA_READY);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -80,5 +119,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return null;
     }
-
 }
+
+
