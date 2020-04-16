@@ -15,10 +15,8 @@
         android:id="@+id/item_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/item_imageview"
-        android:background="#ccc"
-        android:textColor="#ff0000"
+        android:layout_below="@id/item_imageview"
+        android:maxLines="1"
         tools:text="哇哇哇哇哇哇哇哇哇哇" />
 
 </RelativeLayout>

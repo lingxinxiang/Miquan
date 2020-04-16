@@ -1,9 +1,13 @@
 package com.example.miquan;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +31,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public static final int HAND_MSG_DATA_READY = 0x0012;
-    private ListView mListView;
+    private GridView mListView;
     private TestListAdapter mAdapter;
     private List<ReciveData.PhotoData> mPhotoData = new ArrayList<>();
     private Handler mHandler = new Handler() {
@@ -41,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -49,6 +52,18 @@ public class MainActivity extends AppCompatActivity {
 
         mAdapter = new TestListAdapter(mPhotoData);
         mListView.setAdapter(mAdapter);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                /*   Toast.makeText(Day0926Activity.this, "点击的是索引 " + position + ",点击= " + id, Toast.LENGTH_SHORT).show();*/
+                Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
+                intent.setAction(String.valueOf(position));
+                startActivity(intent);
+
+            }
+        });
+
         initData();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .build();

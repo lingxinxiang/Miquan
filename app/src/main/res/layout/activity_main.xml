@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ListView
+    <GridView
         android:id="@+id/test_listview"
+        android:numColumns="5"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-    </ListView>
+    </GridView>
 </LinearLayout>
