@@ -134,7 +134,14 @@ android:orientation="vertical">
             android:textColor="@color/black_light"
             android:textSize="@dimen/q24" />
     </LinearLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/btn_shipping"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/q32"
+        android:layout_marginEnd="@dimen/q32"
+        android:text="出货"
+        android:background="#c77eb5">
+    </Button>
 </LinearLayout>
